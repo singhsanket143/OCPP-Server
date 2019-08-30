@@ -32,7 +32,6 @@ class ChargePoint(cp):
 
     @on(Action.BootNotification)
     def on_boot_notitication(self, charge_point_vendor, charge_point_model, **kwargs):
-        print("On Boot Notification On The Server Called")
         return call_result.BootNotificationPayload(
             current_time=datetime.utcnow().isoformat(),
             interval=10,
@@ -51,8 +50,13 @@ class ChargePoint(cp):
             status=RegistrationStatus.accepted
         )
 
-
-
+    @on(Action.ClearCache)
+    def on_clear_cache():
+        return call_result.ClearCachePayload(
+            status=RegistrationStatus.accepted
+        )
+    
+    
 async def on_connect(websocket, path):
     """ For every new charge point that connects, create a ChargePoint instance
     and start listening for messages.
