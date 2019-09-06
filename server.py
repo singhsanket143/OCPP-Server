@@ -56,6 +56,35 @@ class ChargePoint(cp):
             status=RegistrationStatus.accepted
         )
     
+    @on(Action.DataTransfer)
+    def on_data_transfer(self, vendor_id, message_id, data):
+        return call_result.DataTransferPayload(
+            vendorId=vendor_id,
+            messageId=message_id,
+            data=data
+        )
+    
+    @on(Action.Heartbeat)
+    def heart_beat(self):
+        return call_result.HeartbeatPayload()
+
+    @on(Action.MeterValues)
+    def meter_values(self, connector_id, meter_value, transaction_id):
+        return call_result.MeterValuesPayload(
+            connectorId=connector_id,
+            meterValue=meter_value,
+            transactionId=transaction_id
+        )
+
+    @on(Action.StartTransaction)
+    def on_start_transaction(self, connector_id, id_tag, meter_start, time_stamp, reservaltion_id):
+        return call_result.StartTransactionPayload(
+            connectorId=connector_id,
+            idTag=id_tag,
+            meterStart=meter_start,
+            timeStamp=time_stamp,
+            reservationId=reservaltion_id
+        )
     
 async def on_connect(websocket, path):
     """ For every new charge point that connects, create a ChargePoint instance
