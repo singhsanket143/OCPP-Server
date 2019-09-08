@@ -85,6 +85,29 @@ class ChargePoint(cp):
             timeStamp=time_stamp,
             reservationId=reservaltion_id
         )
+
+    @on(Action.StatusNotification)
+    def on_status_notification(self, connector_id, error_code, status, time_stamp, info, vendor_id, vendor_error_code):
+        return call_result.StatusNotificationPayload(
+            connectorId=connector_id,
+            errorCode=error_code,
+            status=status,
+            timeStamp=time_stamp,
+            info=info,
+            vendorId=vendor_id,
+            vendorErrorCode=vendor_error_code
+        )
+
+    @on(Action.StopTransaction)
+    def on_stop_transaction(meter_stop, time_stamp, transaction_id, reason, id_tag, transaction_data):
+        return call_result.StopTransactionPayload(
+            meterStop=meter_stop,
+            timeStamp=time_stamp,
+            transactionId=transaction_id,
+            reason=reason,
+            idTag=id_tag,
+            transactionData=transaction_data
+        )
     
 async def on_connect(websocket, path):
     """ For every new charge point that connects, create a ChargePoint instance
